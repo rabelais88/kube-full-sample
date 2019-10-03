@@ -16,3 +16,8 @@ spec:
         - name: worker
           image: rabelais/multi-worker
           # since worker doesn't interacte with other apps, port is not necessary.
+          env:
+            - name: REDIS_HOST
+              value: redis-cluster-ip-service
+            - name: REDIS_PORT
+              value: '6379'
