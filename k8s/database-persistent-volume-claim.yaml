@@ -4,7 +4,7 @@ metadata:
   name: database-persistent-volume-claim
 spec:
   accessModes:
-    - ReadWriteOne # ReadWriteOnce, ReadOnlyMany, ReadWriteMany
+    - ReadWriteOnce # ReadWriteOnce, ReadOnlyMany, ReadWriteMany
   resources:
     requests:
       storage: 2Gi # gigabytes
