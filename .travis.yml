@@ -1,11 +1,60 @@
-sudo: required
-services:
-  - docker
+# sudo: required
+# services:
+#   - docker
+# env:
+#   global:
+#   # Do not prompt for user input when using any SDK methods.
+#   - CLOUDSDK_CORE_DISABLE_PROMPTS=1 
+# before_install:
+#   - openssl aes-256-cbc -K $encrypted_19fc3132ee82_key -iv $encrypted_19fc3132ee82_iv -in kube-full-sample-df352aa91354.json.enc -out kube-full-sample-df352aa91354.json -d
+#   # https://cloud.google.com/sdk/docs/downloads-interactive
+#   - curl https://sdk.cloud.google.com | bash > /dev/null;
+#   - source $HOME/google-cloud-sdk/path.bash.inc
+#   - gcloud components update kubectl
+#   - gcloud auth activate-service-account --key-file service-account.json
+#   - gcloud config set project kube-full-sample # use GCP project name
+#   - gcloud config set compute/zone asia-northeast1-a # use GCP region name
+#   - gcloud container clusters get-credentials standard-cluster-1 # use GCP cluster name
+# script:
+#   - docker run -e CI=true USERNAME/docker-react npm run test
 
+
+# https://gist.github.com/mjackson/5887963e7d8b8fb0615416c510ae8857
+# The Google Cloud SDK on Travis is pretty old (2014). So if
+# you want to use an up-to-date version, you have to install
+# your own. This config is the bare minimum you'll need to
+# get an updated version of the SDK + kubectl.
+sudo: required
+cache:
+  directories:
+  # We cache the SDK so we don't have to download it again on subsequent builds.
+  - $HOME/google-cloud-sdk
+services:
+# Include the docker service so you can roll your own images.
+# You can remove this if you already have images somewhere else.
+- docker
+env:
+  global:
+  # Do not prompt for user input when using any SDK methods.
+  - CLOUDSDK_CORE_DISABLE_PROMPTS=1 
 before_install:
   - openssl aes-256-cbc -K $encrypted_19fc3132ee82_key -iv $encrypted_19fc3132ee82_iv -in kube-full-sample-df352aa91354.json.enc -out kube-full-sample-df352aa91354.json -d
-  # https://cloud.google.com/sdk/docs/downloads-interactive
-  - curl https://sdk.cloud.google.com | bash > /dev/null;
+  - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf "$HOME/google-cloud-sdk"; curl https://sdk.cloud.google.com | bash > /dev/null; fi
+  # This line is critical. We setup the SDK to take precedence in our
+  # environment over the old SDK that is already on the machine.
   - source $HOME/google-cloud-sdk/path.bash.inc
   - gcloud components update kubectl
   - gcloud auth activate-service-account --key-file service-account.json
+  - gcloud config set project kube-full-sample # use GCP project name
+  - gcloud config set compute/zone asia-northeast1-a # use GCP region name
+  - gcloud container clusters get-credentials standard-cluster-1 # use GCP cluster name
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin # provided via Travis settings(More options->settings)
+  - docker build -f ./client/Dockerfile.dev "${DOCKER_USERNAME}/multi-client-test:latest" ./client
+script:
+  - docker run -e CI=true "${DOCKER_USERNAME}/docker-react" npm run test
+
+deploy:
+  provider: script
+  script: bash ./deploy.sh
+  on:
+      branch: master
