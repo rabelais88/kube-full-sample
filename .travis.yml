@@ -51,7 +51,7 @@ before_install:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin # provided via Travis settings(More options->settings)
   - docker build -f ./client/Dockerfile.dev -t ${DOCKER_USERNAME}/multi-client-test:latest ./client
 script:
-  - docker run -e CI=true ${DOCKER_USERNAME}/docker-react npm run test
+  - docker run -e CI=true ${DOCKER_USERNAME}/multi-client-test npm run test
 
 deploy:
   provider: script
