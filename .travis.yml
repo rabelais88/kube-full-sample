@@ -44,7 +44,7 @@ before_install:
   # environment over the old SDK that is already on the machine.
   - source $HOME/google-cloud-sdk/path.bash.inc
   - gcloud components update kubectl
-  - gcloud auth activate-service-account --key-file service-account.json
+  - gcloud auth activate-service-account --key-file kube-full-sample-df352aa91354.json
   - gcloud config set project kube-full-sample # use GCP project name
   - gcloud config set compute/zone asia-northeast1-a # use GCP region name
   - gcloud container clusters get-credentials standard-cluster-1 # use GCP cluster name
