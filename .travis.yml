@@ -35,9 +35,11 @@ services:
 - docker
 env:
   global:
+    - SHA=$(git rev-parse HEAD) # pass $SHA to deploy.sh
   # Do not prompt for user input when using any SDK methods.
-  - CLOUDSDK_CORE_DISABLE_PROMPTS=1 
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
+  # use GCP top-right active console menu to try out commands on google console
   - openssl aes-256-cbc -K $encrypted_19fc3132ee82_key -iv $encrypted_19fc3132ee82_iv -in kube-full-sample-df352aa91354.json.enc -out kube-full-sample-df352aa91354.json -d # the command & key is created via GCP console panel
   - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf "$HOME/google-cloud-sdk"; curl https://sdk.cloud.google.com | bash > /dev/null; fi
   # This line is critical. We setup the SDK to take precedence in our
@@ -46,8 +48,8 @@ before_install:
   - gcloud components update kubectl
   - gcloud auth activate-service-account --key-file kube-full-sample-df352aa91354.json
   - gcloud config set project kube-full-sample # use GCP project name
-  - gcloud config set compute/zone asia-northeast1-a # use GCP region name
-  - gcloud container clusters get-credentials standard-cluster-1 # use GCP cluster name
+  - gcloud config set compute/zone asia-northeast1-a # use GCP>Kubernetes Engine>cluster location
+  - gcloud container clusters get-credentials standard-cluster-1 # use GCP>Kubernetes Engine>cluster name
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin # provided via Travis settings(More options->settings)
   - docker build -f ./client/Dockerfile.dev -t ${DOCKER_USERNAME}/multi-client-test:latest ./client
 script:
@@ -57,4 +59,4 @@ deploy:
   provider: script
   script: bash ./deploy.sh
   on:
-      branch: master
+    branch: master

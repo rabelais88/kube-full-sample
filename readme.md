@@ -10,6 +10,18 @@ docker build -f ./worker/Dockerfile -t rabelais/multi-worker:latest ./worker
 docker push rabelais/multi-worker:latest
 ```
 
+## setting credentials on GCP
+```bash
+# on Google Cloud console shell
+gcloud config set project ${PROJECT_NAME}
+gcloud config set compute/zone ${CLUSTER_REGION}
+gcloud container clusters get-credentials ${CLUSTER_NAME}
+kubectl create secret generic pgpassword --from-literal PGPASSWORD=${DESIRED_PASSWORD_FOR_PG}
+```
+
+## installing Helm on GCP console shell
+[link](https://helm.sh/docs/using_helm/#from-script)
+
 ## workflow(travis-CI)
 1. Install Google Cloud SDK CLI
 2. Configure SDK with GC auth
