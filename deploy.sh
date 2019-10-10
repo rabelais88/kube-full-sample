@@ -19,4 +19,4 @@ kubectl apply -f k8s
 # when accessing deployment, "deployment/${yaml.metadata.name}"
 kubectl set image deployments/server-deployment server=rabelais/multi-server:$SHA
 kubectl set image deployments/client-deployment client=rabelais/multi-client:$SHA
-kubectl set image deployments/worker-deployment client=rabelais/multi-worker:$SHA
+kubectl set image deployments/worker-deployment worker=rabelais/multi-worker:$SHA
