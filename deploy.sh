@@ -27,5 +27,5 @@ kubectl apply -f k8s
 # w/o this, k8 wouldn't try to change the image unless the tags are changed.
 # when accessing deployment, "deployment/${yaml.metadata.name}"
 kubectl set image deployment/server-deployment server=rabelais/multi-server:$SHA
-kubectl set iamge deployment/client-deployment client=rabelais/multi-client:$SHA
+kubectl set image deployment/client-deployment client=rabelais/multi-client:$SHA
 kubectl set image deployment/worker-deployment client=rabelais/multi-worker:$SHA
