@@ -11,4 +11,11 @@ spec:
   dnsName:
     - sungryeol.xyz
     - www.sungryeol.xyz
-    
+  acme:
+    config:
+      - http01:
+          ingressClass: nginx
+        domains:
+          - sungryeol.xyz
+          - www.sungryeol.xyz
+          
