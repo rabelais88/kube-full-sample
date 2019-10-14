@@ -1,4 +1,4 @@
-apiVersion: certmanager.k8s.io/v1alpha
+apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
 metadata:
   name: sungryeol-xyz-tls
@@ -8,7 +8,7 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
   commonName: sungryeol.xyz
-  dnsName:
+  dnsNames:
     - sungryeol.xyz
     - www.sungryeol.xyz
   acme:
