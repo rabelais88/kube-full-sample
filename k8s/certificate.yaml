@@ -1,4 +1,6 @@
-apiVersion: certmanager.k8s.io/v1alpha1
+# https://docs.cert-manager.io/en/latest/tasks/upgrading/upgrading-0.10-0.11.html#upgrading-from-v0-10-to-v0-11
+# apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
   name: sungryeol-xyz-tls
